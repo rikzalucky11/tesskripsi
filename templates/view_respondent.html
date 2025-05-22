@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Respondent Details</h1>
+        <a href="{{ url_for('dashboard') }}" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">Back to
+            Dashboard</a>
+    </div>
+
+    <!-- Basic Info Section -->
+    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+        <h2 class="text-xl font-semibold mb-3">Basic Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for key, value in respondent.info.items() %}
+            <div>
+                <p class="font-medium text-gray-700">{{ key }}</p>
+                <p class="text-gray-900">
+                    {% if key == 'Confidence' %}
+                    <span class="px-2 py-1 rounded-full text-sm 
+                            {% if 'High' in respondent.info.Result %}bg-green-100 text-green-800
+                            {% elif 'Medium' in respondent.info.Result %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ value }}
+                    </span>
+                    {% elif key == 'Result' %}
+                    <span class="px-2 py-1 rounded-full text-sm 
+                            {% if 'High' in value %}bg-red-100 text-red-800
+                            {% elif 'Medium' in value %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-green-100 text-green-800{% endif %}">
+                        {{ value }}
+                    </span>
+                    {% else %}
+                    {{ value }}
+                    {% endif %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Probability Distribution -->
+    <div class="bg-purple-50 p-4 rounded-lg mb-6">
+        <h2 class="text-xl font-semibold mb-3">Probability Distribution</h2>
+        <div class="grid grid-cols-3 gap-4">
+            {% for class_name, prob in respondent.probabilities.items() %}
+            <div class="text-center">
+                <p class="font-medium">{{ class_name }}</p>
+                <p class="text-lg font-bold">{{ prob }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Survey Answers -->
+    <div class="bg-gray-50 p-4 rounded-lg">
+        <h2 class="text-xl font-semibold mb-3">Survey Responses</h2>
+        <div class="space-y-4">
+            {% for answer in respondent.answers %}
+            <div class="border-b border-gray-200 pb-3">
+                <p class="font-medium text-gray-700">{{ answer.question }}</p>
+                <div class="flex justify-between items-center">
+                    <p class="text-gray-600">{{ answer.original_text }}</p>
+                    <span class="px-2 py-1 bg-gray-100 rounded-md text-sm">
+                        Score: {{ answer.value }}
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
