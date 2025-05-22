@@ -1,0 +1,9 @@
+Flask
+Flask-Login
+Werkzeug
+tinydb
+pandas
+openpyxl
+scikit-learn
+python-dotenv
+joblib
